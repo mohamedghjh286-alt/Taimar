@@ -10,12 +10,12 @@
 <style>
 :root{
   --bg:#e9edf5; --bg2:#dfe6f3; --card:#ffffff; --soft:#f4f6fb; --ink:#12192e; --muted:#6a748d;
-  --line:#e2e7f1; --a1:#3b63f0; --a2:#19b6d8; --accent:#3b63f0; --on-accent:#fff; --done:#f0701a; --ok:#14a36b;
+  --line:#e2e7f1; --a1:#3b63f0; --a2:#19b6d8; --accent:#3b63f0; --done:#f0701a; --ok:#14a36b;
   --shadow:0 40px 90px -40px rgba(18,25,46,.35);
 }
 @media (prefers-color-scheme:dark){
   :root{--bg:#090d18;--bg2:#101730;--card:#121a2e;--soft:#18213a;--ink:#eef1f9;--muted:#8d98b5;--line:#232d4a;
-    --a1:#7b97ff;--a2:#3fd0ee;--accent:#7b97ff;--on-accent:#0a1020;--done:#ff9150;--ok:#3ddc97;--shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+    --a1:#7b97ff;--a2:#3fd0ee;--accent:#7b97ff;--done:#ff9150;--ok:#3ddc97;--shadow:0 40px 90px -40px rgba(0,0,0,.8)}
 }
 *{box-sizing:border-box;margin:0}
 html,body{height:100%}
@@ -30,37 +30,41 @@ button{font:inherit;color:inherit}
   border:1px solid var(--line);display:grid;grid-template-columns:1.1fr 1fr;overflow:hidden;
 }
 /* ---------- المسرح ---------- */
-.stage{display:grid;place-items:center;padding:36px;position:relative;
-  background:radial-gradient(circle at 50% 45%,var(--soft),transparent 70%)}
-.ring{position:relative;width:min(450px,100%);aspect-ratio:1;container-type:inline-size}
+.stage{display:grid;place-items:center;padding:68px 36px 36px;position:relative;
+  background:radial-gradient(circle at 50% 50%,var(--soft),transparent 70%)}
+.ring{position:relative;width:min(450px,100%,calc(92vh - 150px));aspect-ratio:1;container-type:inline-size}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ring circle{fill:none;stroke-width:4.5;stroke-linecap:round}
 .track{stroke:var(--line)}
-.bar{stroke:url(#g);transition:stroke-dashoffset .25s linear;filter:drop-shadow(0 0 3px color-mix(in srgb,var(--a1) 45%,transparent))}
+.bar{stroke:url(#g);filter:drop-shadow(0 0 3px color-mix(in srgb,var(--a1) 45%,transparent))}
 .tick{stroke:var(--line);stroke-width:.6}
 .tick.big{stroke:var(--muted);stroke-width:.9;opacity:.6}
-.face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqw;text-align:center;padding:0 12cqw}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.8cqw;text-align:center;padding:0 10cqw}
 .ringnote{font-size:4.6cqw;font-weight:500;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:1.4em}
 .ringnote:empty{visibility:hidden}
-.time{font-size:15.5cqw;font-weight:500;direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:.2cqw;line-height:1}
+.time{display:flex;align-items:baseline;justify-content:center;direction:ltr;font-size:13cqw;font-weight:500;
+  font-variant-numeric:tabular-nums;line-height:1;gap:.5cqw}
+.cs{font-size:6.4cqw;color:var(--muted);font-weight:500;min-width:2.6em}
 .state{font-size:3.6cqw;color:var(--muted);display:flex;align-items:center;gap:1.4cqw}
+.meta{font-size:3.2cqw;color:var(--muted);min-height:1.3em;opacity:.85}
 .dot{width:1.8cqw;height:1.8cqw;border-radius:50%;background:var(--muted)}
-.running .dot{background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:ping 1.6s infinite}
-@keyframes ping{70%{box-shadow:0 0 0 1.6cqw transparent}100%{box-shadow:0 0 0 0 transparent}}
+.running .dot{background:var(--ok);animation:ping 1.6s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 var(--ok)}70%,100%{box-shadow:0 0 0 1.6cqw transparent}}
 .done .bar{stroke:var(--done);filter:none}
-.done .time{color:var(--done)}
+.done .time,.done .cs{color:var(--done)}
 .icon{position:absolute;top:20px;inset-inline-start:20px;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
   background:var(--card);color:var(--muted);cursor:pointer;display:grid;place-items:center}
 .icon:hover{color:var(--accent);border-color:var(--accent)}
 .icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.modes{position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;background:var(--soft);padding:4px;border-radius:12px;border:1px solid var(--line)}
+.modes button,.tab{border:0;background:transparent;padding:7px 14px;border-radius:9px;cursor:pointer;font-size:14px;color:var(--muted);white-space:nowrap}
+.modes button[aria-pressed=true],.tab[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
 /* ---------- اللوحة ---------- */
 .panel{padding:30px 34px;border-inline-start:1px solid var(--line);display:flex;flex-direction:column;gap:20px;min-height:0}
 .head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font-size:20px;font-weight:600;display:flex;align-items:center;gap:10px}
 .brand i{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--a1),var(--a2))}
 .tabs{display:flex;background:var(--soft);padding:4px;border-radius:12px;gap:2px}
-.tab{border:0;background:transparent;padding:7px 14px;border-radius:9px;cursor:pointer;font-size:14px;color:var(--muted)}
-.tab[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .view{display:flex;flex-direction:column;gap:20px;min-height:0;flex:1}
 .view[hidden]{display:none}
 .lbl{font-size:13px;color:var(--muted);margin-bottom:8px;display:block}
@@ -72,9 +76,12 @@ button{font:inherit;color:inherit}
 .inputs label{flex:1;font-size:12px;color:var(--muted);text-align:center;display:flex;flex-direction:column;gap:6px}
 .num{width:100%;height:56px;border-radius:14px;border:1px solid var(--line);background:var(--soft);color:var(--ink);
   font:inherit;font-size:24px;text-align:center;font-variant-numeric:tabular-nums}
+.num:disabled{opacity:.55}
 .presets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .chip{border:1px solid var(--line);background:transparent;border-radius:11px;padding:10px 6px;font-size:14px;cursor:pointer;transition:.15s}
 .chip:hover{border-color:var(--accent);color:var(--accent);background:var(--soft)}
+.hint{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:16px;color:var(--muted);font-size:14px;line-height:1.9}
+.swonly{display:none}.sw .swonly{display:block}.sw .cdonly{display:none}
 .actions{display:flex;gap:10px;margin-top:auto}
 .btn{flex:1;height:56px;border-radius:16px;border:0;font-size:17px;font-weight:600;cursor:pointer;transition:transform .1s,filter .15s}
 .btn:hover{filter:brightness(1.07)}.btn:active{transform:scale(.98)}
@@ -84,7 +91,7 @@ button{font:inherit;color:inherit}
 kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin-inline-end:5px;color:var(--ink);background:var(--soft)}
 /* ---------- السجل ---------- */
 .list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;min-height:0;padding-inline-end:2px}
-.empty{margin:auto;color:var(--muted);text-align:center;font-size:15px;line-height:1.8}
+.empty{margin:auto;color:var(--muted);text-align:center;font-size:15px;line-height:1.8;white-space:pre-line}
 .item{border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;background:var(--soft)}
 .item .info{flex:1;min-width:0}
 .item .t{font-weight:500;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -103,8 +110,9 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
 /* ---------- ملء الشاشة ---------- */
 .full body{padding:0}
 .full .app{max-width:none;height:100vh;border-radius:0;border:0;box-shadow:none;grid-template-columns:1fr}
-.full .panel{display:none}
-.full .ring{width:min(86vh,88vw)}
+.full .panel,.full .modes{display:none}
+.full .stage{padding:20px}
+.full .ring{width:min(90vh,90vw)}
 /* ---------- رسالة الإنجاز ---------- */
 .overlay{position:fixed;inset:0;background:rgba(6,10,22,.55);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:10;padding:20px}
 .overlay[hidden]{display:none}
@@ -114,15 +122,15 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
 .congrats .em{font-size:56px;line-height:1}
 .congrats h2{font-size:30px;margin:14px 0 6px;background:linear-gradient(135deg,var(--a1),var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .congrats p{color:var(--muted);font-size:17px}
-.congrats .task{margin-top:14px;font-weight:600;font-size:18px;color:var(--ink)}
+.congrats .task{margin-top:14px;font-weight:600;font-size:18px}
 .congrats .dur{margin-top:6px;font-size:14px;color:var(--muted)}
 .congrats .btn{margin-top:26px;width:100%;flex:none}
 .confetti span{position:fixed;top:-20px;width:9px;height:15px;border-radius:2px;z-index:11;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(112vh) rotate(720deg)}}
 @media (max-width:860px){
   .app{grid-template-columns:1fr;height:auto;min-height:100vh;border-radius:24px}
-  .stage{padding:30px 20px}.panel{border-inline-start:0;border-top:1px solid var(--line);padding:24px 20px}
-  .list{max-height:360px}
+  .stage{padding:70px 20px 30px}.panel{border-inline-start:0;border-top:1px solid var(--line);padding:24px 20px}
+  .list{max-height:360px}.modes button{padding:7px 10px;font-size:13px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -130,6 +138,10 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
 <body>
 <main class="app" id="app">
   <section class="stage">
+    <div class="modes" role="group" aria-label="الوضع">
+      <button id="modeCd" aria-pressed="true">مؤقّت تنازلي</button>
+      <button id="modeSw" aria-pressed="false">ساعة إيقاف</button>
+    </div>
     <button class="icon" id="fs" title="ملء الشاشة (F)" aria-label="ملء الشاشة">
       <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
     </button>
@@ -143,17 +155,18 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
       </svg>
       <div class="face" role="timer">
         <div class="ringnote" id="ringNote"></div>
-        <div class="time" id="time">00:05:00</div>
+        <div class="time"><span id="hms">00:05:00</span><span class="cs" id="cs">.00</span></div>
         <div class="state"><span class="dot"></span><span id="status">جاهز</span></div>
+        <div class="meta" id="meta"></div>
       </div>
     </div>
   </section>
 
   <section class="panel">
     <div class="head">
-      <div class="brand"><i></i>المؤقّت</div>
+      <div class="brand"><i></i><span id="brand">المؤقّت</span></div>
       <div class="tabs" role="tablist">
-        <button class="tab" role="tab" id="tabTimer" aria-selected="true">المؤقّت</button>
+        <button class="tab" role="tab" id="tabTimer" aria-selected="true">التحكم</button>
         <button class="tab" role="tab" id="tabHist" aria-selected="false">السجل <span id="count"></span></button>
       </div>
     </div>
@@ -163,7 +176,7 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
         <label class="lbl" for="note">ملحوظة تظهر داخل الدائرة</label>
         <input class="noteinp" id="note" maxlength="60" placeholder="مثال: بذاكر مادة الفيزياء" autocomplete="off">
       </div>
-      <div>
+      <div class="cdonly">
         <span class="lbl">المدة</span>
         <div class="inputs">
           <label>ساعات<input class="num" id="h" type="number" min="0" max="99" value="0"></label>
@@ -171,7 +184,7 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
           <label>ثواني<input class="num" id="s" type="number" min="0" max="59" value="0"></label>
         </div>
       </div>
-      <div class="presets">
+      <div class="presets cdonly">
         <button class="chip" data-s="300">5 دقائق</button>
         <button class="chip" data-s="600">10 دقائق</button>
         <button class="chip" data-s="1500">25 دقيقة</button>
@@ -179,6 +192,7 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
         <button class="chip" data-s="2700">45 دقيقة</button>
         <button class="chip" data-s="3600">ساعة</button>
       </div>
+      <div class="hint swonly">العدّاد يبدأ من الصفر ويفضل شغّال لحد ما توقفه.<br>لو أوقفته أو أعدته بيتسجل تلقائيًا، وتقدر تكمل عليه بعدين من تبويب السجل.</div>
       <div class="actions">
         <button class="btn primary" id="start">ابدأ</button>
         <button class="btn ghost" id="reset">إعادة</button>
@@ -212,122 +226,173 @@ kbd{font:inherit;font-size:11.5px;border:1px solid var(--line);border-radius:6px
 
 <script>
 const $ = id => document.getElementById(id);
-const app = $('app'), bar = $('bar'), timeEl = $('time'), statusEl = $('status');
-const noteEl = $('note'), startBtn = $('start');
+const app = $('app'), bar = $('bar'), hmsEl = $('hms'), csEl = $('cs'), statusEl = $('status'), metaEl = $('meta');
+const noteEl = $('note'), ringNote = $('ringNote'), startBtn = $('start');
 const inputs = [$('h'), $('m'), $('s')];
-const R = 55, C = 2 * Math.PI * R, KEY = 'timer.history.v1';
+const C = 2 * Math.PI * 55, KEYS = {cd: 'timer.history.v1', sw: 'stopwatch.history.v1'};
 bar.style.strokeDasharray = C;
 
 /* علامات الدقائق حول الدائرة */
 (() => {
-  const g = $('ticks'); let s = '';
+  let s = '';
   for (let i = 0; i < 60; i++){
     const a = i * Math.PI / 30, big = i % 5 === 0, r1 = big ? 45.5 : 47.5, r2 = 49;
     s += `<line class="tick${big ? ' big' : ''}" x1="${60+r1*Math.cos(a)}" y1="${60+r1*Math.sin(a)}" x2="${60+r2*Math.cos(a)}" y2="${60+r2*Math.sin(a)}"/>`;
   }
-  g.innerHTML = s;
+  $('ticks').innerHTML = s;
 })();
 
-let total = 0, endAt = 0, left = 0, tick = null, running = false, audioCtx = null, session = null;
+/* ---------- الحالة ---------- */
+let mode = 'cd', tick = null, audioCtx = null;
+const cd = {total: 300, endAt: 0, left: 0, running: false, finished: false, session: null};
+const sw = {elapsed: 0, startAt: 0, running: false, session: null};
+const modeNote = {cd: '', sw: ''};
 
 /* ---------- تخزين المتصفح ---------- */
 const store = {
-  get(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } },
-  set(v){ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} }
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)) || []; }catch(e){ return []; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 };
-let history = store.get();
+const hist = {cd: store.get(KEYS.cd), sw: store.get(KEYS.sw)};
 
 /* ---------- أدوات ---------- */
 const pad = n => String(n).padStart(2, '0');
 const fmt = sec => `${pad(Math.floor(sec/3600))}:${pad(Math.floor(sec%3600/60))}:${pad(sec%60)}`;
+const fmtMs = ms => `${fmt(Math.floor(ms/1000))}.${pad(Math.floor(ms%1000/10))}`;
 const readInputs = () => { const [h,m,s] = inputs.map(i => Math.max(0, parseInt(i.value) || 0)); return h*3600 + m*60 + s; };
 const writeInputs = sec => { $('h').value = Math.floor(sec/3600); $('m').value = Math.floor(sec%3600/60); $('s').value = sec%60; };
-const lock = on => inputs.forEach(i => i.disabled = on);
 const noteText = () => noteEl.value.trim();
 const when = ts => new Date(ts).toLocaleString('ar-EG', {dateStyle:'medium', timeStyle:'short'});
-const setState = (txt, cls) => { statusEl.textContent = txt; app.classList.toggle('running', cls === 'run'); };
-const remainingSec = () => running ? Math.max(0, Math.ceil((endAt - Date.now())/1000)) : Math.ceil(left/1000);
+const clock = ts => new Date(ts).toLocaleTimeString('ar-EG', {hour:'numeric', minute:'2-digit'});
+const swMs = () => sw.running ? sw.elapsed + (Date.now() - sw.startAt) : sw.elapsed;
 
-function draw(ms){
-  const sec = Math.ceil(ms/1000);
-  timeEl.textContent = fmt(sec);
-  bar.style.strokeDashoffset = total ? C * (1 - ms/(total*1000)) : 0;
-  document.title = running ? `${fmt(sec)} • ${noteText() || 'مؤقّت'}` : 'مؤقّت';
+/* ---------- الرسم ---------- */
+function render(){
+  let ms, prog, running;
+  if (mode === 'cd'){
+    running = cd.running;
+    ms = cd.running ? Math.max(0, cd.endAt - Date.now()) : cd.finished ? 0 : (cd.left || cd.total * 1000);
+    prog = cd.total ? ms / (cd.total * 1000) : 1;
+  } else {
+    running = sw.running; ms = swMs(); prog = (ms % 60000) / 60000;
+  }
+  const t = Math.floor(ms / 10);
+  hmsEl.textContent = fmt(Math.floor(t / 100));
+  csEl.textContent = '.' + pad(t % 100);
+  bar.style.strokeDashoffset = C * (1 - prog);
+  if (running) document.title = `${hmsEl.textContent} • ${noteText() || (mode === 'cd' ? 'مؤقّت' : 'ساعة إيقاف')}`;
 }
-function updateNote(){ $('ringNote').textContent = noteText(); if (session) saveSession('partial', true); }
+function updateMeta(){
+  let s = '';
+  if (mode === 'cd'){ s = `المدة ${fmt(cd.total)}`; if (cd.running) s += ` • ينتهي ${clock(cd.endAt)}`; }
+  else if (sw.session) s = `بدأ ${clock(sw.session.started)}`;
+  metaEl.textContent = s;
+}
+function setState(txt, run){ statusEl.textContent = txt; app.classList.toggle('running', !!run); }
+function syncUI(){
+  if (mode === 'cd'){
+    startBtn.textContent = cd.running ? 'إيقاف مؤقت' : cd.left ? 'استمرار' : 'ابدأ';
+    setState(cd.running ? 'قيد العمل' : cd.finished ? 'انتهى الوقت' : cd.left ? 'متوقف مؤقتًا' : 'جاهز', cd.running);
+    app.classList.toggle('done', cd.finished);
+    inputs.forEach(i => i.disabled = cd.running);
+    document.title = cd.finished ? 'مبروك! أنجزت المهمة' : 'مؤقّت';
+  } else {
+    startBtn.textContent = sw.running ? 'إيقاف مؤقت' : sw.elapsed ? 'استمرار' : 'ابدأ';
+    setState(sw.running ? 'قيد العمل' : sw.elapsed ? 'متوقفة مؤقتًا' : 'جاهز', sw.running);
+    app.classList.remove('done'); document.title = 'ساعة إيقاف';
+  }
+  ringNote.textContent = noteText();
+  updateMeta(); render();
+}
+function startTick(){ clearInterval(tick); tick = setInterval(() => {
+  if (mode === 'cd' && cd.running && cd.endAt <= Date.now()) cdFinish(); else render();
+}, 33); }
+function stopTick(){ clearInterval(tick); tick = null; }
 
 /* ---------- السجل ---------- */
-function saveSession(status, quiet){
-  if (!session) return;
-  const rem = status === 'done' ? 0 : remainingSec();
-  if (status !== 'done' && rem >= total) return;            // لسه ما اشتغلش
-  const e = {id: session.id, note: noteText(), total, remaining: rem, status, updated: Date.now()};
-  const i = history.findIndex(x => x.id === e.id);
-  if (i >= 0) history[i] = e; else history.unshift(e);
-  history.sort((a,b) => b.updated - a.updated);
-  history = history.slice(0, 200);
-  store.set(history);
+function upsert(k, e, quiet){
+  const a = hist[k], i = a.findIndex(x => x.id === e.id);
+  if (i >= 0) a[i] = e; else a.unshift(e);
+  a.sort((x, y) => y.updated - x.updated);
+  hist[k] = a.slice(0, 200); store.set(KEYS[k], hist[k]);
   if (!quiet) renderHistory();
 }
+function saveCd(status, quiet){
+  const s = cd.session; if (!s) return;
+  const rem = status === 'done' ? 0 : (cd.running ? Math.max(0, cd.endAt - Date.now()) : cd.left);
+  if (status !== 'done' && rem >= cd.total * 1000) return;
+  upsert('cd', {id: s.id, note: noteText(), total: cd.total, remaining: Math.ceil(rem/1000), remMs: rem, status, started: s.started, updated: Date.now()}, quiet);
+}
+function saveSw(quiet){
+  const s = sw.session; if (!s) return;
+  const el = swMs(); if (el <= 0) return;
+  upsert('sw', {id: s.id, note: noteText(), elapsed: el, started: s.started, updated: Date.now()}, quiet);
+}
 function renderHistory(){
-  const list = $('list'); list.textContent = '';
-  $('count').textContent = history.length ? `(${history.length})` : '';
-  if (!history.length){
+  const list = $('list'), arr = hist[mode]; list.textContent = '';
+  $('count').textContent = arr.length ? `(${arr.length})` : '';
+  if (!arr.length){
     const d = document.createElement('div'); d.className = 'empty';
-    d.textContent = 'لا يوجد سجل بعد.\nأي جلسة تشغّلها هتتحفظ هنا تلقائيًا.';
-    d.style.whiteSpace = 'pre-line'; list.append(d); return;
+    d.textContent = 'لا يوجد سجل بعد.\nأي جلسة تشغّلها هتتحفظ هنا تلقائيًا.'; list.append(d); return;
   }
-  history.forEach(e => {
+  arr.forEach(e => {
     const row = document.createElement('div'); row.className = 'item';
     const info = document.createElement('div'); info.className = 'info';
     const t = document.createElement('div'); t.className = 't'; t.textContent = e.note || 'بدون ملحوظة';
     const m = document.createElement('div'); m.className = 'm';
-    const b = document.createElement('span'); const done = e.status === 'done';
-    b.className = 'badge ' + (done ? 'ok' : 'part'); b.textContent = done ? 'مكتملة' : 'غير مكتملة';
-    m.append(b, `${fmt(e.total)} • ${when(e.updated)}`);
-    info.append(t, m);
-    if (!done){
-      const p = document.createElement('div'); p.className = 'mini';
-      const bb = document.createElement('b'); bb.style.width = (100 - e.remaining / e.total * 100) + '%'; p.append(bb);
-      const rem = document.createElement('div'); rem.className = 'm'; rem.textContent = `المتبقي ${fmt(e.remaining)}`;
-      info.append(p, rem);
+    let label = 'متابعة';
+    if (mode === 'cd'){
+      const done = e.status === 'done';
+      const b = document.createElement('span'); b.className = 'badge ' + (done ? 'ok' : 'part'); b.textContent = done ? 'مكتملة' : 'غير مكتملة';
+      m.append(b, `${fmt(e.total)} • ${when(e.updated)}`); info.append(t, m);
+      if (done) label = 'إعادة';
+      else {
+        const rm = e.remMs ?? e.remaining * 1000;
+        const p = document.createElement('div'); p.className = 'mini';
+        const bb = document.createElement('b'); bb.style.width = (100 - rm / (e.total * 1000) * 100) + '%'; p.append(bb);
+        const r = document.createElement('div'); r.className = 'm'; r.textContent = `المتبقي ${fmt(Math.ceil(rm/1000))}`;
+        info.append(p, r);
+      }
+    } else {
+      m.textContent = `${fmtMs(e.elapsed)} • ${when(e.updated)}`; info.append(t, m);
     }
-    const go = document.createElement('button'); go.className = 'sm'; go.textContent = done ? 'إعادة' : 'متابعة';
-    go.onclick = () => loadEntry(e.id);
-    const del = document.createElement('button'); del.className = 'sm del'; del.textContent = '✕'; del.title = 'حذف'; del.setAttribute('aria-label','حذف');
-    del.onclick = () => { history = history.filter(x => x.id !== e.id); store.set(history); renderHistory(); };
+    const go = document.createElement('button'); go.className = 'sm'; go.textContent = label; go.onclick = () => loadEntry(e.id);
+    const del = document.createElement('button'); del.className = 'sm del'; del.textContent = '✕'; del.title = 'حذف'; del.setAttribute('aria-label', 'حذف');
+    del.onclick = () => { hist[mode] = hist[mode].filter(x => x.id !== e.id); store.set(KEYS[mode], hist[mode]); renderHistory(); };
     row.append(info, go, del); list.append(row);
   });
 }
 function loadEntry(id){
-  const e = history.find(x => x.id === id); if (!e) return;
-  if (running){ saveSession('partial'); }
-  clearInterval(tick); running = false; closeOverlay();
-  app.classList.remove('done');
-  noteEl.value = e.note; $('ringNote').textContent = e.note;
-  total = e.total; lock(false);
-  if (e.status === 'done' || e.remaining <= 0){
-    left = 0; session = null; writeInputs(e.total);
-    timeEl.textContent = fmt(total); bar.style.strokeDashoffset = 0;
-    startBtn.textContent = 'ابدأ'; setState('جاهز');
+  const e = hist[mode].find(x => x.id === id); if (!e) return;
+  noteEl.value = e.note;
+  if (mode === 'cd'){
+    if (cd.running) cdStart();
+    closeOverlay(); cd.finished = false; cd.total = e.total;
+    if (e.status === 'done' || e.remaining <= 0){ cd.left = 0; cd.session = null; writeInputs(e.total); }
+    else { cd.left = e.remMs ?? e.remaining * 1000; cd.session = {id: e.id, started: e.started || e.updated}; writeInputs(Math.ceil(cd.left/1000)); }
   } else {
-    left = e.remaining * 1000; session = {id: e.id}; writeInputs(e.remaining); draw(left);
-    startBtn.textContent = 'استمرار'; setState('جاهزة للمتابعة');
+    if (sw.running) swStart();
+    sw.elapsed = e.elapsed; sw.session = {id: e.id, started: e.started || e.updated};
   }
-  setTab('timer');
+  syncUI(); setTab('timer');
 }
 $('export').onclick = () => {
-  if (!history.length) return;
-  const q = v => `"${String(v).replace(/"/g,'""')}"`;
-  const rows = [['الملحوظة','المدة','المتبقي','الحالة','التاريخ'].map(q).join(',')];
-  history.forEach(e => rows.push([e.note || '-', fmt(e.total), fmt(e.remaining), e.status === 'done' ? 'مكتملة' : 'غير مكتملة', when(e.updated)].map(q).join(',')));
-  const blob = new Blob(['\uFEFF' + rows.join('\r\n')], {type:'text/csv;charset=utf-8'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'timer-history.csv';
+  const arr = hist[mode]; if (!arr.length) return;
+  const q = v => `"${String(v).replace(/"/g, '""')}"`;
+  const rows = [(mode === 'cd' ? ['الملحوظة','المدة','المتبقي','الحالة','التاريخ'] : ['الملحوظة','الزمن المسجّل','بدأ','آخر تحديث']).map(q).join(',')];
+  arr.forEach(e => rows.push((mode === 'cd'
+    ? [e.note || '-', fmt(e.total), fmt(Math.ceil((e.remMs ?? e.remaining*1000)/1000)), e.status === 'done' ? 'مكتملة' : 'غير مكتملة', when(e.updated)]
+    : [e.note || '-', fmtMs(e.elapsed), when(e.started || e.updated), when(e.updated)]).map(q).join(',')));
+  const blob = new Blob(['\uFEFF' + rows.join('\r\n')], {type: 'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = mode === 'cd' ? 'timer-history.csv' : 'stopwatch-history.csv';
   document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 };
-$('clear').onclick = () => { if (history.length && confirm('مسح كل السجل؟')){ history = []; store.set(history); renderHistory(); } };
+$('clear').onclick = () => {
+  if (hist[mode].length && confirm('مسح سجل هذا القسم؟')){ hist[mode] = []; store.set(KEYS[mode], []); renderHistory(); }
+};
 
-/* ---------- التبويبات ---------- */
+/* ---------- التبويبات والأوضاع ---------- */
 function setTab(name){
   const t = name === 'timer';
   $('viewTimer').hidden = !t; $('viewHist').hidden = t;
@@ -335,6 +400,18 @@ function setTab(name){
 }
 $('tabTimer').onclick = () => setTab('timer');
 $('tabHist').onclick = () => { renderHistory(); setTab('hist'); };
+function setMode(m){
+  if (m === mode) return;
+  if (mode === 'cd' && cd.running) cdStart();
+  if (mode === 'sw' && sw.running) swStart();
+  modeNote[mode] = noteEl.value; mode = m; noteEl.value = modeNote[m];
+  closeOverlay(); app.classList.toggle('sw', m === 'sw');
+  $('modeCd').setAttribute('aria-pressed', m === 'cd'); $('modeSw').setAttribute('aria-pressed', m === 'sw');
+  $('brand').textContent = m === 'cd' ? 'المؤقّت' : 'ساعة الإيقاف';
+  syncUI(); renderHistory();
+}
+$('modeCd').onclick = () => setMode('cd');
+$('modeSw').onclick = () => setMode('sw');
 
 /* ---------- الصوت ---------- */
 function ensureAudio(){
@@ -352,50 +429,49 @@ function chime(){
   }catch(e){}
 }
 
-/* ---------- التشغيل ---------- */
-function loop(){
-  const ms = endAt - Date.now();
-  if (ms <= 0) return finish();
-  left = ms; draw(ms);
-}
-function start(){
-  if (running){
-    clearInterval(tick); running = false; left = endAt - Date.now();
-    saveSession('partial'); writeInputs(Math.ceil(left/1000)); draw(left);
-    startBtn.textContent = 'استمرار'; setState('متوقف مؤقتًا'); lock(false); return;
+/* ---------- المؤقّت التنازلي ---------- */
+function cdStart(){
+  if (cd.running){
+    cd.left = Math.max(0, cd.endAt - Date.now()); cd.running = false; stopTick();
+    saveCd('partial'); writeInputs(Math.ceil(cd.left/1000)); syncUI(); return;
   }
-  app.classList.remove('done');
-  if (!left){
-    total = readInputs();
-    if (!total){ $('m').focus(); return; }
-    left = total * 1000; session = {id: Date.now()};
-  } else if (!session) session = {id: Date.now()};
-  ensureAudio(); endAt = Date.now() + left; running = true; lock(true);
-  startBtn.textContent = 'إيقاف مؤقت'; setState('قيد العمل', 'run');
-  tick = setInterval(loop, 200); loop();
+  cd.finished = false;
+  if (!cd.left){
+    cd.total = readInputs(); if (!cd.total){ $('m').focus(); return; }
+    cd.left = cd.total * 1000; cd.session = {id: Date.now(), started: Date.now()};
+  } else if (!cd.session) cd.session = {id: Date.now(), started: Date.now()};
+  ensureAudio(); cd.endAt = Date.now() + cd.left; cd.running = true; startTick(); syncUI();
 }
-function finish(){
-  clearInterval(tick); running = false; left = 0;
-  timeEl.textContent = '00:00:00'; bar.style.strokeDashoffset = C;
-  app.classList.add('done'); setState('انتهى الوقت'); startBtn.textContent = 'ابدأ'; lock(false);
-  saveSession('done'); session = null; writeInputs(total);
-  document.title = 'مبروك! أنجزت المهمة';
-  chime(); showCongrats();
+function cdFinish(){
+  cd.running = false; cd.left = 0; cd.finished = true; stopTick();
+  saveCd('done'); cd.session = null; writeInputs(cd.total);
+  syncUI(); chime(); showCongrats();
 }
-function reset(){
-  if (session) saveSession('partial');
-  const keep = left > 0 && session;
-  clearInterval(tick); running = false; left = 0; session = null;
-  app.classList.remove('done'); closeOverlay();
-  if (keep) writeInputs(total);
-  total = readInputs(); timeEl.textContent = fmt(total); bar.style.strokeDashoffset = 0;
-  startBtn.textContent = 'ابدأ'; setState('جاهز'); lock(false); document.title = 'مؤقّت';
+function cdReset(){
+  if (cd.session) saveCd('partial');
+  const keep = cd.left > 0 && cd.session;
+  stopTick(); cd.running = false; cd.left = 0; cd.session = null; cd.finished = false; closeOverlay();
+  if (keep) writeInputs(cd.total);
+  cd.total = readInputs(); syncUI();
 }
+
+/* ---------- ساعة الإيقاف ---------- */
+function swStart(){
+  if (sw.running){ sw.elapsed = swMs(); sw.running = false; stopTick(); saveSw(); syncUI(); return; }
+  if (!sw.session) sw.session = {id: Date.now(), started: Date.now()};
+  sw.startAt = Date.now(); sw.running = true; startTick(); syncUI();
+}
+function swReset(){
+  saveSw(); stopTick(); sw.running = false; sw.elapsed = 0; sw.session = null; syncUI();
+}
+
+const start = () => mode === 'cd' ? cdStart() : swStart();
+const reset = () => mode === 'cd' ? cdReset() : swReset();
 
 /* ---------- رسالة الإنجاز ---------- */
 function showCongrats(){
   $('cTask').textContent = noteText() ? `«${noteText()}»` : '';
-  $('cDur').textContent = `مدة الجلسة ${fmt(total)}`;
+  $('cDur').textContent = `مدة الجلسة ${fmt(cd.total)}`;
   $('overlay').hidden = false; $('cOk').focus();
   const box = $('confetti'), cols = ['#3b63f0','#19b6d8','#f0701a','#14a36b','#f5c518','#e5484d'];
   for (let i = 0; i < 60; i++){
@@ -413,11 +489,19 @@ document.addEventListener('fullscreenchange', () => document.documentElement.cla
 
 /* ---------- ربط الأحداث ---------- */
 startBtn.onclick = start; $('reset').onclick = reset; $('fs').onclick = toggleFull;
-noteEl.addEventListener('input', updateNote);
+noteEl.addEventListener('input', () => {
+  ringNote.textContent = noteText();
+  if (mode === 'cd' && cd.session) saveCd('partial', true);
+  if (mode === 'sw' && sw.session) saveSw(true);
+});
 inputs.forEach(i => i.addEventListener('input', () => {
-  if (!running){ left = 0; session = null; total = readInputs(); timeEl.textContent = fmt(total); bar.style.strokeDashoffset = 0; startBtn.textContent = 'ابدأ'; setState('جاهز'); }
+  if (mode === 'cd' && !cd.running){ cd.left = 0; cd.session = null; cd.finished = false; cd.total = readInputs(); syncUI(); }
 }));
-document.querySelectorAll('.chip').forEach(b => b.onclick = () => { if (running) return; session = session && left ? (saveSession('partial'), null) : null; writeInputs(+b.dataset.s); left = 0; reset(); });
+document.querySelectorAll('.chip').forEach(b => b.onclick = () => {
+  if (cd.running) return;
+  if (cd.session) saveCd('partial');
+  cd.left = 0; cd.session = null; cd.finished = false; writeInputs(+b.dataset.s); cd.total = readInputs(); syncUI();
+});
 document.addEventListener('keydown', e => {
   if (!$('overlay').hidden && (e.key === 'Escape' || e.key === 'Enter')){ closeOverlay(); return; }
   const t = e.target.tagName; if (t === 'INPUT' || t === 'TEXTAREA' || e.ctrlKey || e.metaKey) return;
@@ -425,9 +509,9 @@ document.addEventListener('keydown', e => {
   else if (e.key.toLowerCase() === 'r') reset();
   else if (e.key.toLowerCase() === 'f') toggleFull();
 });
-window.addEventListener('beforeunload', () => { if (running) saveSession('partial', true); });
+window.addEventListener('beforeunload', () => { if (cd.running) saveCd('partial', true); if (sw.running) saveSw(true); });
 
-reset(); renderHistory();
+cd.total = readInputs(); syncUI(); renderHistory();
 </script>
 </body>
 </html>
